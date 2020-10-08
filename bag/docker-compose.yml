@@ -8,11 +8,13 @@ services:
       PGPASSWORD: postgres
     volumes:
       - ./:/opt/bag/
+      - ${DATA_DIR:-./data/}:/opt/bag/data/
   db:
     image: postgis/postgis:9.6-2.5-alpine
     environment:
       POSTGRES_PASSWORD: postgres
     ports:
-      - $DOCKER_DB_PORT:5432
+      - ${DOCKER_DB_PORT:-25599}:5432
     volumes:
       - ./z_script.sh:/docker-entrypoint-initdb.d/20_script.sh:ro
+    restart: unless-stopped
